@@ -1,4 +1,8 @@
-package main.java.com.timahtay.ftcscoutingapp;
+    package com.timdan.ftcscoutingapp;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -217,6 +221,13 @@ public class GUI extends javax.swing.JFrame {
                 new GUI().setVisible(true);
             }
         });
+        
+        
+        /*try {
+            DataHandler.importData();
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
