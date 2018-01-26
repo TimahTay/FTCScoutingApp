@@ -52,16 +52,19 @@ public class DataHandler {
         TreeMap<Integer, ArrayList<String>> matchData = new TreeMap();
         
         //TODO: IMPORT FROM EXCEL FILE WITH APACHE POI
+        System.out.println("IMPORT DATA WORKING");
         
-        
-        InputStream inp = new FileInputStream("C:\\Users\\Admin\\Documents\\GitHub\\FTCScoutingAppScouting Template.xls"); //TODO: Make the FileInputStream editable with import
+        InputStream inp = new FileInputStream("C:\\Users\\Admin\\Documents\\GitHub\\FTCScoutingApp\\Scouting_Template.xlsx"); //TODO: Make the FileInputStream editable with import
         try {
             Workbook wb = WorkbookFactory.create(inp);
         } catch (InvalidFormatException ex) {
-            System.out.println("ERROR: Invalid Format");
+            System.out.println("ERROR: Invalid format");
         } catch (EncryptedDocumentException ex) {
-            System.out.println("ERROR: The Document is Encrypted");
+            System.out.println("ERROR: The document is encrypted");
+        } catch (FileNotFoundException ex) {
+            System.out.println("ERROR: File not found");
         }
+        
         HSSFWorkbook wb = new HSSFWorkbook(inp);
         
         HSSFSheet sheet = wb.getSheetAt(0);
