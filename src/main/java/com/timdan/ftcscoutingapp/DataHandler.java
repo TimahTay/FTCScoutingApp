@@ -23,6 +23,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import org.apache.poi.ss.*;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
@@ -32,7 +33,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  */
 public class DataHandler {
     
-    public static TreeMap<Integer, ArrayList<String>> importData() throws FileNotFoundException, IOException {
+    public static TreeMap<Integer, ArrayList<String>> importData() throws FileNotFoundException, IOException, InvalidFormatException {
         /*
         Key for ArrayList:
         0  - team
@@ -53,10 +54,11 @@ public class DataHandler {
         
         //TODO: IMPORT FROM EXCEL FILE WITH APACHE POI
         System.out.println("IMPORT DATA WORKING");
+        Workbook wb;
         
-        InputStream inp = new FileInputStream("Scouting_Template.xlsx"); //TODO: Make the FileInputStream editable with import
+        InputStream inp = new FileInputStream("C:\\Users\\Admin\\Documents\\GitHub\\FTCScoutingApp\\Scouting_Template.xlsx"); //TODO: Make the FileInputStream editable with import
         try {
-            Workbook wb = WorkbookFactory.create(inp);
+            wb = WorkbookFactory.create(inp);
         } catch (InvalidFormatException ex) {
             System.out.println("ERROR: Invalid format");
         } catch (EncryptedDocumentException ex) {
@@ -64,10 +66,18 @@ public class DataHandler {
         } catch (FileNotFoundException ex) {
             System.out.println("ERROR: File not found");
         }
+        wb = WorkbookFactory.create(inp);
         
-        HSSFWorkbook wb = new HSSFWorkbook(inp);
         
-        HSSFSheet sheet = wb.getSheetAt(0);
+        try {
+            wb = WorkbookFactory.create(inp);
+        } catch (InvalidFormatException ex) {
+            Logger.getLogger(DataHandler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EncryptedDocumentException ex) {
+            Logger.getLogger(DataHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Sheet sheet = wb.getSheetAt(0);
         HSSFRow row;
         HSSFCell cell;
 
