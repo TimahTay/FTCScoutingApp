@@ -54,7 +54,7 @@ public class DataHandler {
         //TODO: IMPORT FROM EXCEL FILE WITH APACHE POI
         System.out.println("IMPORT DATA WORKING");
         
-        InputStream inp = new FileInputStream("C:\\Users\\Admin\\Documents\\GitHub\\FTCScoutingApp\\Scouting_Template.xlsx"); //TODO: Make the FileInputStream editable with import
+        InputStream inp = new FileInputStream("Scouting_Template.xlsx"); //TODO: Make the FileInputStream editable with import
         try {
             Workbook wb = WorkbookFactory.create(inp);
         } catch (InvalidFormatException ex) {
