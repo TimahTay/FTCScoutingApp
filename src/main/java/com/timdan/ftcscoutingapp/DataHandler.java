@@ -68,11 +68,18 @@ public class DataHandler {
         cell.setCellType(CellType.STRING);
         //cell.setCellValue("a test");
 
-        // Write the output to a file
-        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
-        wb.write(fileOut);
-        fileOut.close();
+        Iterator rows = sheet.rowIterator();
+        row = (Row) rows.next();
+        Iterator cells = row.cellIterator();
+        int rowCount = 0;
         
+        while(cells.hasNext()){
+            cell = (Cell) cells.next();
+            if(cell.getCellType() == Cell.CELL_TYPE_STRING && !cell.getStringCellValue().isEmpty()){
+                matchData.put(rowCount, null);
+                rowCount++;
+            }
+        }
         return matchData;
     }
   
