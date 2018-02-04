@@ -38,7 +38,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  */
 public class DataHandler {
     //TODO change back to value type ArrayList<String>
-    public static TreeMap<Integer, ArrayList<String>> importData() throws FileNotFoundException, IOException, InvalidFormatException{
+    public static TreeMap<Integer, ArrayList<Object>> importData() throws FileNotFoundException, IOException, InvalidFormatException{
         /*
         Key for ArrayList:
         0  - team
@@ -55,44 +55,44 @@ public class DataHandler {
         11 - endgame:park
         12 - notes
         */
-        //TODO change back to value type ArrayList<String>
-        TreeMap<Integer, ArrayList<String>> matchData = new TreeMap();
-        ArrayList<String> scores = new ArrayList();
+
+        TreeMap<Integer, ArrayList<Object>> MatchData = new TreeMap<Integer, ArrayList<Object>>();
+        ArrayList<Object> scores = new ArrayList();
         
-        //TODO: IMPORT FROM EXCEL FILE WITH APACHE POI
-        System.out.println("IMPORT DATA WORKING...");
-        
-        InputStream inp = new FileInputStream("C:\\Users\\Admin\\Documents\\GitHub\\FTCScoutingApp\\Scouting_Template.xlsx"); //TODO: Make the FileInputStream editable with import
+        InputStream inp = new FileInputStream("Scouting_Template.xlsx"); //TODO: make the FileInputStream changable with import
 
         Workbook wb = WorkbookFactory.create(inp);
         Sheet sheet = wb.getSheetAt(0);
-        Row row = sheet.getRow(3);
-        int rowCount = 0;
-        Cell cell = row.getCell(0);
 
         Iterator rows = sheet.rowIterator();
+        rows.next();rows.next();rows.next(); //Optimal
+        Row row = (Row) rows.next();
+        
         Iterator cells = row.cellIterator();
+        Cell cell = row.getCell(0);
         int count = 1;
         
         
         //Sets the keys of matchData to the match number
-        while(rows.hasNext() && cell != null){
-            int i = 1;
+        while(rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK){
             cells = row.cellIterator();
             //Sets the values of matchData to an arrylist with data from the row
-            while(cells.hasNext() && cell != null){
-                scores.add(cell.getStringCellValue());
-                cell = row.getCell(i);
-                i++;
+            while(cells.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK){
+                cell = (Cell) cells.next();
+                if(cell.getCellTypeEnum() == CellType.STRING)
+                    scores.add(cell.getStringCellValue());
+                else if(cell.getCellTypeEnum() == CellType.NUMERIC)
+                    scores.add(cell.getNumericCellValue());
             }
-            matchData.put(count, scores);
+            MatchData.put(count, scores);
             row = (Row) rows.next();
             cell = row.getCell(0);
-            System.out.println(scores);
+            System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
             scores.clear();
             count++;
         }
-        return matchData;
+        return MatchData;
+                
     }
   
     

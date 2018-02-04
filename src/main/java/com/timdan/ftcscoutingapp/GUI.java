@@ -225,7 +225,7 @@ public class GUI extends javax.swing.JFrame {
         });
         
         
-            System.out.println(DataHandler.importData());
+            System.out.println("Data Handler return: " + DataHandler.importData());
 
     }
 
