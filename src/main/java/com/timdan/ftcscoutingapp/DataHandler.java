@@ -56,7 +56,7 @@ public class DataHandler {
         12 - notes
         */
 
-        TreeMap<Integer, ArrayList<Object>> MatchData = new TreeMap<Integer, ArrayList<Object>>();
+        TreeMap<Integer, ArrayList<Object>> matchData = new TreeMap<Integer, ArrayList<Object>>();
         ArrayList<Object> scores = new ArrayList();
         
         InputStream inp = new FileInputStream("Scouting_Template.xlsx"); //TODO: make the FileInputStream changable with import
@@ -84,14 +84,14 @@ public class DataHandler {
                 else if(cell.getCellTypeEnum() == CellType.NUMERIC)
                     scores.add(cell.getNumericCellValue());
             }
-            MatchData.put(count, scores);
+            matchData.put(count, scores);
             row = (Row) rows.next();
             cell = row.getCell(0);
             System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
             scores.clear();
             count++;
         }
-        return MatchData;
+        return matchData;
                 
     }
   
