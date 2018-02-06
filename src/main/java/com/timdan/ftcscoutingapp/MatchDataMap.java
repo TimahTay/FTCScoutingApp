@@ -29,6 +29,7 @@ public class MatchDataMap extends TreeMap {
     private final TreeMap<Integer, ArrayList<Object>> matchData;
     private final ArrayList<Object> scores;
     private final InputStream inp;
+    private int rowCount = 0;
     private Workbook wb;
     private Sheet sheet;
     
@@ -81,6 +82,7 @@ public class MatchDataMap extends TreeMap {
             row = (Row) rows.next();
             cell = row.getCell(0);
             System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
+            rowCount++;
             scores.clear();
             count++;
         }
@@ -124,6 +126,8 @@ public class MatchDataMap extends TreeMap {
     public void setSheet(Sheet sheet) {
         this.sheet = sheet;
     }
+    
+    
 
     @Override
     public String toString() {

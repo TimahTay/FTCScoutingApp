@@ -2,6 +2,7 @@
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -38,9 +39,9 @@ public class GUI extends javax.swing.JFrame {
         jPopupMenu1 = new javax.swing.JPopupMenu();
         jPopupMenu2 = new javax.swing.JPopupMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableTeamRankings = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tableMatchData = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -54,7 +55,7 @@ public class GUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Scouting Calculator");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableTeamRankings.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -90,15 +91,15 @@ public class GUI extends javax.swing.JFrame {
                 "Team", "Score", "Ranking"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(1).setMinWidth(50);
-            jTable1.getColumnModel().getColumn(1).setMaxWidth(50);
-            jTable1.getColumnModel().getColumn(2).setMinWidth(50);
-            jTable1.getColumnModel().getColumn(2).setMaxWidth(50);
+        jScrollPane1.setViewportView(tableTeamRankings);
+        if (tableTeamRankings.getColumnModel().getColumnCount() > 0) {
+            tableTeamRankings.getColumnModel().getColumn(1).setMinWidth(50);
+            tableTeamRankings.getColumnModel().getColumn(1).setMaxWidth(50);
+            tableTeamRankings.getColumnModel().getColumn(2).setMinWidth(50);
+            tableTeamRankings.getColumnModel().getColumn(2).setMaxWidth(50);
         }
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tableMatchData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -134,7 +135,7 @@ public class GUI extends javax.swing.JFrame {
                 "Team", "Autonomous Score", "Teleop Score", "Endgame Score"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(tableMatchData);
 
         jLabel6.setText("Match Data");
 
@@ -225,9 +226,20 @@ public class GUI extends javax.swing.JFrame {
         });
         
         
-            System.out.println("Data Handler return: " + DataHandler.importData());
-
+        System.out.println("Data Handler return: " + DataHandler.importData());
+        
+        
     }
+    
+    /*
+    public void setTable() {
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < scores.size(); j++) {
+                tableMatchData.
+            }
+        }
+    }
+*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel6;
@@ -242,7 +254,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable tableMatchData;
+    private javax.swing.JTable tableTeamRankings;
     // End of variables declaration//GEN-END:variables
 }

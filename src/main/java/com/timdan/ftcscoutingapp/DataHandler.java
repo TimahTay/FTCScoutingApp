@@ -65,8 +65,8 @@ public class DataHandler {
         Sheet sheet = matchData.getWorkbook().getSheetAt(0);
 
         Iterator rows = sheet.rowIterator();
-        rows.next();rows.next();rows.next(); //Optimal
-        Row row = (Row) rows.next();
+        rows.next(); rows.next(); rows.next(); //Optimal
+        Row row = (Row)rows.next();
         
         Iterator cells = row.cellIterator();
         Cell cell = row.getCell(0);
@@ -74,26 +74,24 @@ public class DataHandler {
         
         
         //Sets the keys of matchData to the match number
-        while(rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK){
+        while (rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
             cells = row.cellIterator();
             //Sets the values of matchData to an arrylist with data from the row
-            while(cells.hasNext() && cell.getCellTypeEnum() != CellType.BLANK){
+            while (cells.hasNext() && cell.getCellTypeEnum() != CellType.BLANK) {
                 cell = (Cell) cells.next();
-                if(cell.getCellTypeEnum() == CellType.STRING)
+                if (cell.getCellTypeEnum() == CellType.STRING)
                     scores.add(cell.getStringCellValue());
-                else if(cell.getCellTypeEnum() == CellType.NUMERIC)
+                else if (cell.getCellTypeEnum() == CellType.NUMERIC)
                     scores.add(cell.getNumericCellValue());
             }
             matchData.put(count, scores);
-            row = (Row) rows.next();
+            row = (Row)rows.next();
             cell = row.getCell(0);
             //System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
             scores.clear();
             count++;
         }
+        
         return matchData;
-                
     }
-  
-    
 }
