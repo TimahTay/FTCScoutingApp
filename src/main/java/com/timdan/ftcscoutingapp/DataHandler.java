@@ -8,6 +8,7 @@ package com.timdan.ftcscoutingapp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,6 +24,10 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import org.apache.poi.ss.*;
+import org.apache.poi.ss.formula.functions.Column;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -32,8 +37,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  * @author Admin
  */
 public class DataHandler {
-    
-    public static TreeMap<Integer, ArrayList<String>> importData() throws FileNotFoundException, IOException, InvalidFormatException {
+    //TODO change back to value type ArrayList<String>
+    public static TreeMap<Integer, ArrayList<Object>> importData() throws FileNotFoundException, IOException, InvalidFormatException{
         /*
         Key for ArrayList:
         0  - team
@@ -50,54 +55,44 @@ public class DataHandler {
         11 - endgame:park
         12 - notes
         */
-        TreeMap<Integer, ArrayList<String>> matchData = new TreeMap();
-        
-        //TODO: IMPORT FROM EXCEL FILE WITH APACHE POI
-        System.out.println("IMPORT DATA WORKING");
-        Workbook wb;
-        
-        InputStream inp = new FileInputStream("C:\\Users\\Admin\\Documents\\GitHub\\FTCScoutingApp\\Scouting_Template.xlsx"); //TODO: Make the FileInputStream editable with import
-        try {
-            wb = WorkbookFactory.create(inp);
-        } catch (InvalidFormatException ex) {
-            System.out.println("ERROR: Invalid format");
-        } catch (EncryptedDocumentException ex) {
-            System.out.println("ERROR: The document is encrypted");
-        } catch (FileNotFoundException ex) {
-            System.out.println("ERROR: File not found");
-        }
-        wb = WorkbookFactory.create(inp);
-        
-        
-        try {
-            wb = WorkbookFactory.create(inp);
-        } catch (InvalidFormatException ex) {
-            Logger.getLogger(DataHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EncryptedDocumentException ex) {
-            Logger.getLogger(DataHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        Sheet sheet = wb.getSheetAt(0);
-        HSSFRow row;
-        HSSFCell cell;
 
+        TreeMap<Integer, ArrayList<Object>> matchData = new TreeMap<Integer, ArrayList<Object>>();
+        ArrayList<Object> scores = new ArrayList();
         
+        InputStream inp = new FileInputStream("Scouting_Template.xlsx"); //TODO: make the FileInputStream changable with import
+
+        Workbook wb = WorkbookFactory.create(inp);
+        Sheet sheet = wb.getSheetAt(0);
+
         Iterator rows = sheet.rowIterator();
-        //Iterates across each cell
-        row = (HSSFRow) rows.next();
+        rows.next();rows.next();rows.next(); //Optimal
+        Row row = (Row) rows.next();
+        
         Iterator cells = row.cellIterator();
-        int rowCount = 0;
-            
-        while(cells.hasNext()) {
-            cell = (HSSFCell) cells.next();
-            if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING && !cell.getStringCellValue().isEmpty()) { //checks if the cell has a string, and is not blank (to avoid black formatting cells)
-                //add the content of the cell to the key of the next entry in matchData
-                matchData.put(rowCount, null);
-                rowCount++;
+        Cell cell = row.getCell(0);
+        int count = 1;
+        
+        
+        //Sets the keys of matchData to the match number
+        while(rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK){
+            cells = row.cellIterator();
+            //Sets the values of matchData to an arrylist with data from the row
+            while(cells.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK){
+                cell = (Cell) cells.next();
+                if(cell.getCellTypeEnum() == CellType.STRING)
+                    scores.add(cell.getStringCellValue());
+                else if(cell.getCellTypeEnum() == CellType.NUMERIC)
+                    scores.add(cell.getNumericCellValue());
             }
+            matchData.put(count, scores);
+            row = (Row) rows.next();
+            cell = row.getCell(0);
+            System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
+            scores.clear();
+            count++;
         }
-        System.out.println(matchData.toString());
         return matchData;
+                
     }
   
     
