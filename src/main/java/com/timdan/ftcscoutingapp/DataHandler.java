@@ -38,7 +38,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  */
 public class DataHandler {
     //TODO change back to value type ArrayList<String>
-    public static TreeMap<Integer, ArrayList<Object>> importData() throws FileNotFoundException, IOException, InvalidFormatException{
+    public static MatchDataMap importData() throws FileNotFoundException, IOException, InvalidFormatException{
         /*
         Key for ArrayList:
         0  - team
@@ -56,13 +56,13 @@ public class DataHandler {
         12 - notes
         */
 
-        TreeMap<Integer, ArrayList<Object>> matchData = new TreeMap<Integer, ArrayList<Object>>();
+
         ArrayList<Object> scores = new ArrayList();
         
         InputStream inp = new FileInputStream("Scouting_Template.xlsx"); //TODO: make the FileInputStream changable with import
+        MatchDataMap matchData = new MatchDataMap(inp);
 
-        Workbook wb = WorkbookFactory.create(inp);
-        Sheet sheet = wb.getSheetAt(0);
+        Sheet sheet = matchData.getWorkbook().getSheetAt(0);
 
         Iterator rows = sheet.rowIterator();
         rows.next();rows.next();rows.next(); //Optimal
@@ -77,7 +77,7 @@ public class DataHandler {
         while(rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK){
             cells = row.cellIterator();
             //Sets the values of matchData to an arrylist with data from the row
-            while(cells.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK){
+            while(cells.hasNext() && cell.getCellTypeEnum() != CellType.BLANK){
                 cell = (Cell) cells.next();
                 if(cell.getCellTypeEnum() == CellType.STRING)
                     scores.add(cell.getStringCellValue());
@@ -87,7 +87,7 @@ public class DataHandler {
             matchData.put(count, scores);
             row = (Row) rows.next();
             cell = row.getCell(0);
-            System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
+            //System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
             scores.clear();
             count++;
         }
