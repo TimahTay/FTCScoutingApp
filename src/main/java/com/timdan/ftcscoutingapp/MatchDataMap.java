@@ -51,7 +51,7 @@ public class MatchDataMap extends TreeMap {
          */
         
         inp = i;
-        matchData = new TreeMap<Integer, ArrayList<Object>>();
+        matchData = new TreeMap();
         scores = new ArrayList();
         
         wb = WorkbookFactory.create(inp);
@@ -69,7 +69,7 @@ public class MatchDataMap extends TreeMap {
         while (rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
             cells = row.cellIterator();
             //Sets the values of matchData to an arrylist with data from the row
-            while (cells.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
+            while (cells.hasNext()  && cell.getCellTypeEnum() != CellType.BLANK) {
                 cell = (Cell) cells.next();
                 if (cell.getCellTypeEnum() == CellType.STRING) {
                     scores.add(cell.getStringCellValue());
@@ -113,6 +113,10 @@ public class MatchDataMap extends TreeMap {
         return inp;
     }
     
+    public Workbook getWorkbook() {
+        return wb;
+    }
+    
     public void setWorkbook(Workbook wb){
         this.wb = wb;
     }
@@ -123,7 +127,7 @@ public class MatchDataMap extends TreeMap {
 
     @Override
     public String toString() {
-        Iterator rows = sheet.rowIterator();
+        /*Iterator rows = sheet.rowIterator();
         rows.next();
         rows.next();
         rows.next(); //Optimal
@@ -137,7 +141,7 @@ public class MatchDataMap extends TreeMap {
         while (rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
             cells = row.cellIterator();
             //Sets the values of matchData to an arrylist with data from the row
-            while (cells.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
+            while (cells.hasNext() && cell.getCellTypeEnum() != CellType.BLANK) {
                 cell = (Cell) cells.next();
                 if (cell.getCellTypeEnum() == CellType.STRING) {
                     scores.add(cell.getStringCellValue());
@@ -150,6 +154,7 @@ public class MatchDataMap extends TreeMap {
             cell = row.getCell(0);
             System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
             scores.clear();
-            count++;
-    
+            count++;*/
+        return "tostring isnt working rn";
+    }
 }
