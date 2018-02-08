@@ -38,7 +38,32 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  */
 public class DataHandler {
     //TODO change back to value type ArrayList<String>
-    public static MatchDataMap importData() throws FileNotFoundException, IOException, InvalidFormatException{
+    public static void importData(MatchDataMap matchData) { //Method takes MatchDataMap, and inputs to tableMatchData
+        /*
+        Key for ArrayList:
+        0  - team
+        1  - auto:jewel
+        2  - auto:park
+        3  - auto:glyph:nonbonus
+        4  - auto:glyph:bonus
+        5  - teleop:glyph:scored
+        6  - teleop:glyph:rows
+        7  - teleop:glyph:columns
+        8  - teleop:glyph:cipher
+        9  - endgame:relic:1
+        10 - endgame:relic:2
+        11 - endgame:park
+        12 - notes
+        */
+        
+        
+    }
+}
+
+
+
+// Old inport method code in case we need it back
+//public static MatchDataMap importData() throws FileNotFoundException, IOException, InvalidFormatException{
         /*
         Key for ArrayList:
         0  - team
@@ -57,7 +82,7 @@ public class DataHandler {
         */
 
 
-        ArrayList<Object> scores = new ArrayList();
+        /*ArrayList<Object> scores = new ArrayList();
         
         InputStream inp = new FileInputStream("Scouting_Template.xlsx"); //TODO: make the FileInputStream changable with import
         MatchDataMap matchData = new MatchDataMap(inp);
@@ -92,6 +117,4 @@ public class DataHandler {
             count++;
         }
         
-        return matchData;
-    }
-}
+        return matchData;*/

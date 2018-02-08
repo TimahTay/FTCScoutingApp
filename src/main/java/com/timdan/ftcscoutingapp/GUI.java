@@ -1,7 +1,9 @@
     package com.timdan.ftcscoutingapp;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,12 +20,15 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  * @author Tim Tersigni & Daniel Lee
  */
 public class GUI extends javax.swing.JFrame {
-
+    InputStream inp;
+    MatchDataMap matchData;
     /**
      * Creates new form GUI
      */
-    public GUI() {
+    public GUI() throws FileNotFoundException, IOException, InvalidFormatException {
         initComponents();
+        inp = new FileInputStream("Scouting_Template.xlsx");
+        matchData = new MatchDataMap(inp);
     }
 
     /**
@@ -35,22 +40,17 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        jPopupMenu2 = new javax.swing.JPopupMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableTeamRankings = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         tableMatchData = new javax.swing.JTable();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu5 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-
-        jMenuItem1.setText("jMenuItem1");
+        lableMatchData = new javax.swing.JLabel();
+        lableTeamRankings = new javax.swing.JLabel();
+        MenuBar = new javax.swing.JMenuBar();
+        menuFile = new javax.swing.JMenu();
+        menuItemImport = new javax.swing.JMenuItem();
+        menuSave = new javax.swing.JMenu();
+        menuEdit = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Scouting Calculator");
@@ -137,26 +137,31 @@ public class GUI extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tableMatchData);
 
-        jLabel6.setText("Match Data");
+        lableMatchData.setText("Match Data");
 
-        jLabel7.setText("Team Rankings");
+        lableTeamRankings.setText("Team Rankings");
 
-        jMenuBar1.setName("Scouting Calculator GUI"); // NOI18N
+        MenuBar.setName("Scouting Calculator GUI"); // NOI18N
 
-        jMenu1.setText("File");
+        menuFile.setText("File");
 
-        jMenu3.setText("Import");
-        jMenu1.add(jMenu3);
+        menuItemImport.setText("Import");
+        menuItemImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemImportActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemImport);
 
-        jMenu5.setText("Save");
-        jMenu1.add(jMenu5);
+        menuSave.setText("Save");
+        menuFile.add(menuSave);
 
-        jMenuBar1.add(jMenu1);
+        MenuBar.add(menuFile);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        menuEdit.setText("Edit");
+        MenuBar.add(menuEdit);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(MenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -166,11 +171,11 @@ public class GUI extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(lableMatchData))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                    .addComponent(lableTeamRankings))
                 .addGap(22, 22, 22))
         );
         layout.setVerticalGroup(
@@ -178,8 +183,8 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
+                    .addComponent(lableMatchData)
+                    .addComponent(lableTeamRankings))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -190,6 +195,12 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void menuItemImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemImportActionPerformed
+        // TODO add your handling code here:
+        DataHandler.importData(matchData);
+    }//GEN-LAST:event_menuItemImportActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -221,12 +232,18 @@ public class GUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUI().setVisible(true);
+                try {
+                    new GUI().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidFormatException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
-        
-        System.out.println("Data Handler return: " + DataHandler.importData());
+
+        //System.out.println("Data Handler return: " + DataHandler.importData());
         
         
     }
@@ -242,18 +259,15 @@ public class GUI extends javax.swing.JFrame {
 */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JPopupMenu jPopupMenu2;
+    private javax.swing.JMenuBar MenuBar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lableMatchData;
+    private javax.swing.JLabel lableTeamRankings;
+    private javax.swing.JMenu menuEdit;
+    private javax.swing.JMenu menuFile;
+    private javax.swing.JMenuItem menuItemImport;
+    private javax.swing.JMenu menuSave;
     private javax.swing.JTable tableMatchData;
     private javax.swing.JTable tableTeamRankings;
     // End of variables declaration//GEN-END:variables

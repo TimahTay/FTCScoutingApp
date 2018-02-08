@@ -94,7 +94,7 @@ public class MatchDataMap extends TreeMap {
 
     public ArrayList<Object> getScores(int r) {
         Row row = sheet.getRow(r);
-        
+        scores.clear();
         Iterator cells;
         Cell cell = row.getCell(0);
         int count = 1;
