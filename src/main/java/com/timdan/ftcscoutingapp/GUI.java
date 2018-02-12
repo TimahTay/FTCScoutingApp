@@ -1,5 +1,4 @@
-    package com.timdan.ftcscoutingapp;
-
+package com.timdan.ftcscoutingapp;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;

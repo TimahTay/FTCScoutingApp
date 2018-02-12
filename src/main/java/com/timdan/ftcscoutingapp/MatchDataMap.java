@@ -39,12 +39,12 @@ public class MatchDataMap extends TreeMap {
         0  - team
         1  - auto:jewel
         2  - auto:park
-        3  - auto:glyph:nonbonus
+        3  - auto:glyph
         4  - auto:glyph:bonus
         5  - teleop:glyph:scored
         6  - teleop:glyph:rows
         7  - teleop:glyph:columns
-        8  - teleop:glyph:cipher
+        8  - teleop:glyph:ciphers
         9  - endgame:relic:1
         10 - endgame:relic:2
         11 - endgame:park
