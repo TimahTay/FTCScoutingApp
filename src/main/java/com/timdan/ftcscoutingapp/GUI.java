@@ -4,6 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -28,6 +32,8 @@ public class GUI extends javax.swing.JFrame {
         initComponents();
         inp = new FileInputStream("Scouting_Template.xlsx");
         matchData = new MatchDataMap(inp);
+        
+        matchData = DataHandler.importData();
     }
 
     /**
@@ -197,7 +203,7 @@ public class GUI extends javax.swing.JFrame {
     private void menuItemImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemImportActionPerformed
         try {
             // TODO add your handling code here:
-            DataHandler.importData();
+            matchData = DataHandler.importData();
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
@@ -205,6 +211,7 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuItemImportActionPerformed
 
+    
     
     /**
      * @param args the command line arguments
@@ -233,7 +240,7 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

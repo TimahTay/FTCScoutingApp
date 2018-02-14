@@ -40,20 +40,27 @@ public class DataHandler {
     //TODO change back to value type ArrayList<String>
     public static MatchDataMap importData() throws FileNotFoundException, IOException, InvalidFormatException { //Method takes MatchDataMap, and inputs to tableMatchData
         
-        /*Key for ArrayList:
+        /*
+        Key for scores ArrayList:
         0  - team
         1  - auto:jewel
         2  - auto:park
-        3  - auto:glyph:nonbonus
+        3  - auto:glyph:scored
         4  - auto:glyph:bonus
         5  - teleop:glyph:scored
         6  - teleop:glyph:rows
         7  - teleop:glyph:columns
-        8  - teleop:glyph:cipher
-        9  - endgame:relic:1
-        10 - endgame:relic:2
-        11 - endgame:park
-        12 - notes
+        8  - teleop:glyph:ciphers
+        9  - endgame:relic1:zone
+        10 - endgame:relic1:standing
+        11 - endgame:relic2:zone
+        12 - endgame:relic2:standing
+        13 - endgame:balanced
+        14 - notes
+        15 - scores:autonomous
+        16 - scores:teleop
+        17 - scores:endgame
+        18 - scores:final
         */
 
         ArrayList<Object> scores = new ArrayList();
@@ -64,27 +71,26 @@ public class DataHandler {
         Sheet sheet = matchData.getWorkbook().getSheetAt(0);
 
         Iterator rows = sheet.rowIterator();
-        rows.next(); rows.next(); rows.next(); //Optimal
+        rows.next(); rows.next(); rows.next(); //Muy Optimal
         Row row = (Row)rows.next();
         
         Iterator cells = row.cellIterator();
         Cell cell = row.getCell(0);
         int count = 1;
         
-        
         //Sets the keys of matchData to the match number
         while (rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
             cells = row.cellIterator();
             //Sets the values of matchData to an arrylist with data from the row
-            while (cells.hasNext() && cell.getCellTypeEnum() != CellType.BLANK) {
+            while (cells.hasNext()) {
                 cell = (Cell) cells.next();
                 if (cell.getCellTypeEnum() == CellType.STRING)
                     scores.add(cell.getStringCellValue());
                 else if (cell.getCellTypeEnum() == CellType.NUMERIC)
                     scores.add(cell.getNumericCellValue());
             }
-            matchData.put(count, scores);
             row = (Row)rows.next();
+            matchData.put(count, scores);
             cell = row.getCell(0);
             //System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
             scores.clear();
@@ -92,7 +98,6 @@ public class DataHandler {
         }
         
         return matchData;
-        
     }
 }
 
