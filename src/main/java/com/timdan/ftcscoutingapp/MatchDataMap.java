@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -52,11 +53,11 @@ public class MatchDataMap extends TreeMap {
         11 - endgame:relic2:zone
         12 - endgame:relic2:standing
         13 - endgame:balanced
-        14 - notes
-        15 - scores:autonomous
-        16 - scores:teleop
-        17 - scores:endgame
-        18 - scores:final
+        14 - scores:autonomous
+        15 - scores:teleop
+        16 - scores:endgame
+        17 - scores:final
+        18 - notes
         */
         
         inp = i;
@@ -74,6 +75,9 @@ public class MatchDataMap extends TreeMap {
         Cell cell = row.getCell(0);
         int count = 1;
         
+        ArrayList input = new ArrayList();
+        
+        
         //Sets the keys of matchData to the match number
         while (rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
             cells = row.cellIterator();
@@ -88,26 +92,18 @@ public class MatchDataMap extends TreeMap {
                     scores.add(cell.getNumericCellValue());
                 }
             }
-            matchData.put(count, scores);
+            
+            input = scores;
+            matchData.put(count, input);
+            input.clear();
+            System.out.println(matchData);
+            
             row = (Row) rows.next();
             cell = row.getCell(0);
-            
-            Set set = matchData.entrySet();
-            Iterator it = set.iterator();
-        
-            while (it.hasNext()) {
-                Map.Entry me = (Map.Entry)it.next();
-                System.out.print("Key is: " + me.getKey() + " & ");
-                System.out.println("Value Is: " + me.getValue());
-            }
-            
-            //System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
+
             rowCount++;
-            scores.clear();
             count++;
         }
-        
-        
     }
 
     public TreeMap<Integer, ArrayList<Object>> getMatchData() {
@@ -147,40 +143,5 @@ public class MatchDataMap extends TreeMap {
     
     public void setSheet(Sheet sheet) {
         this.sheet = sheet;
-    }
-    
-    
-
-    @Override
-    public String toString() {
-        /*Iterator rows = sheet.rowIterator();
-        rows.next();
-        rows.next();
-        rows.next(); //Optimal
-        Row row = (Row) rows.next();
-
-        Iterator cells;
-        Cell cell = row.getCell(0);
-        int count = 1;
-
-        //Sets the keys of matchData to the match number
-        while (rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
-            cells = row.cellIterator();
-            //Sets the values of matchData to an arrylist with data from the row
-            while (cells.hasNext() && cell.getCellTypeEnum() != CellType.BLANK) {
-                cell = (Cell) cells.next();
-                if (cell.getCellTypeEnum() == CellType.STRING) {
-                    scores.add(cell.getStringCellValue());
-                } else if (cell.getCellTypeEnum() == CellType.NUMERIC) {
-                    scores.add(cell.getNumericCellValue());
-                }
-            }
-            matchData.put(count, scores);
-            row = (Row) rows.next();
-            cell = row.getCell(0);
-            System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
-            scores.clear();
-            count++;*/
-        return "tostring isnt working rn";
     }
 }

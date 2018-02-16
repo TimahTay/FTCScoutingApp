@@ -101,17 +101,6 @@ public class DataHandler {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // Old inport method code in case we need it back
 //public static MatchDataMap importData() throws FileNotFoundException, IOException, InvalidFormatException{
         /*

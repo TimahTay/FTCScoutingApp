@@ -32,8 +32,8 @@ public class GUI extends javax.swing.JFrame {
         initComponents();
         inp = new FileInputStream("Scouting_Template.xlsx");
         matchData = new MatchDataMap(inp);
-        
-        matchData = DataHandler.importData();
+        System.out.println(matchData.getMatchData());
+        setTable();
     }
 
     /**
@@ -253,22 +253,18 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         });
-        
-
-        //System.out.println("Data Handler return: " + DataHandler.importData());
-        
-        
     }
     
-    /*
+    
     public void setTable() {
-        for (int i = 0; i < rowCount; i++) {
-            for (int j = 0; j < scores.size(); j++) {
-                tableMatchData.
-            }
+        
+        Set<String> keys = matchData.keySet();
+        System.out.println("keys" + keys);
+        for (String key : keys){
+            System.out.println("Value of "+key+" is: "+matchData.get(key));
         }
     }
-*/
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
