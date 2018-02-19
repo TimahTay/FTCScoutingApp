@@ -1,4 +1,5 @@
 package com.timdan.ftcscoutingapp;
+import com.timdan.ftcscoutingapp.MatchDataMap;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,6 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 /*
@@ -30,9 +34,12 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() throws FileNotFoundException, IOException, InvalidFormatException {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
+        // Import data and set to table
         inp = new FileInputStream("Scouting_Template.xlsx");
         matchData = new MatchDataMap(inp);
-        System.out.println(matchData.getMatchData());
+        matchData.setMatchData();
         setTable();
     }
 
@@ -51,6 +58,11 @@ public class GUI extends javax.swing.JFrame {
         tableMatchData = new javax.swing.JTable();
         lableMatchData = new javax.swing.JLabel();
         lableTeamRankings = new javax.swing.JLabel();
+        comboBox_Phase = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        comboBox_Criteria = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         MenuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemImport = new javax.swing.JMenuItem();
@@ -106,38 +118,38 @@ public class GUI extends javax.swing.JFrame {
 
         tableMatchData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Team", "Autonomous Score", "Teleop Score", "Endgame Score"
+                "Team", "Autonomous Score", "Teleop Score", "Endgame Score", "Total Score"
             }
         ));
         jScrollPane3.setViewportView(tableMatchData);
@@ -145,6 +157,26 @@ public class GUI extends javax.swing.JFrame {
         lableMatchData.setText("Match Data");
 
         lableTeamRankings.setText("Team Rankings");
+
+        comboBox_Phase.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Autonomous", "Teleop", "Endgame" }));
+        comboBox_Phase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBox_PhaseActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Sort By:");
+
+        comboBox_Criteria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBox_Criteria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBox_CriteriaActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Game Phase");
+
+        jLabel3.setText("Criteria");
 
         MenuBar.setName("Scouting Calculator GUI"); // NOI18N
 
@@ -177,11 +209,25 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lableMatchData))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lableTeamRankings))
-                .addGap(22, 22, 22))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lableTeamRankings)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(110, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1)
+                        .addGap(38, 38, 38)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(comboBox_Phase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(comboBox_Criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,7 +238,17 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(lableTeamRankings))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(comboBox_Criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboBox_Phase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
@@ -210,6 +266,27 @@ public class GUI extends javax.swing.JFrame {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_menuItemImportActionPerformed
+
+    private void comboBox_PhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_PhaseActionPerformed
+        String phase = (String)comboBox_Phase.getSelectedItem();
+        
+        switch (phase) {
+            case "Autonomous":
+                comboBox_Criteria.setModel((ComboBoxModel<String>) new JComboBox());
+                comboBox_Criteria.addItem(new ComboItem("test", "test"));
+                break;
+            case "Teleop":
+                break;
+            case "Endgame":
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_comboBox_PhaseActionPerformed
+
+    private void comboBox_CriteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_CriteriaActionPerformed
+        //TODO: stuff
+    }//GEN-LAST:event_comboBox_CriteriaActionPerformed
 
     
     
@@ -257,17 +334,29 @@ public class GUI extends javax.swing.JFrame {
     
     
     public void setTable() {
-        
-        Set<String> keys = matchData.keySet();
-        System.out.println("keys" + keys);
-        for (String key : keys){
-            System.out.println("Value of "+key+" is: "+matchData.get(key));
+        ArrayList<Object> output;
+        for (int i = 0; i < matchData.getRowCount(); i++) {
+            output = (ArrayList<Object>)matchData.getMatchData().get(i);
+            tableMatchData.getModel().setValueAt(output.get(0), i, 0);
+            tableMatchData.getModel().setValueAt(Math.round((Double)(output.get(14))), i, 1);
+            tableMatchData.getModel().setValueAt(Math.round((Double)(output.get(15))), i, 2);
+            tableMatchData.getModel().setValueAt(Math.round((Double)(output.get(16))), i, 3);
+            tableMatchData.getModel().setValueAt(Math.round((Double)(output.get(17))), i, 4);
         }
+    }
+    
+    public void rank() {
+        
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JComboBox<String> comboBox_Criteria;
+    private javax.swing.JComboBox<String> comboBox_Phase;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lableMatchData;

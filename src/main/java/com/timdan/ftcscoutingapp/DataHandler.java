@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -56,11 +56,11 @@ public class DataHandler {
         11 - endgame:relic2:zone
         12 - endgame:relic2:standing
         13 - endgame:balanced
-        14 - notes
-        15 - scores:autonomous
-        16 - scores:teleop
-        17 - scores:endgame
-        18 - scores:final
+        14 - scores:autonomous
+        15 - scores:teleop
+        16 - scores:endgame
+        17 - scores:final
+        18 - notes
         */
 
         ArrayList<Object> scores = new ArrayList();

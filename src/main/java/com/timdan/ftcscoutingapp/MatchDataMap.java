@@ -66,7 +66,8 @@ public class MatchDataMap extends TreeMap {
         
         wb = WorkbookFactory.create(inp);
         sheet = wb.getSheetAt(0);
-
+      
+        /*
         Iterator rows = sheet.rowIterator();
         rows.next();rows.next();rows.next(); //Optimal
         Row row = (Row) rows.next();
@@ -75,7 +76,7 @@ public class MatchDataMap extends TreeMap {
         Cell cell = row.getCell(0);
         int count = 1;
         
-        ArrayList input = new ArrayList();
+        ArrayList scores = new ArrayList();
         
         
         //Sets the keys of matchData to the match number
@@ -93,9 +94,9 @@ public class MatchDataMap extends TreeMap {
                 }
             }
             
-            input = scores;
-            matchData.put(count, input);
-            input.clear();
+            matchData.put(count, scores);
+            System.out.println(matchData);
+            scores.clear();
             System.out.println(matchData);
             
             row = (Row) rows.next();
@@ -104,18 +105,25 @@ public class MatchDataMap extends TreeMap {
             rowCount++;
             count++;
         }
+        
+        */
     }
 
     public TreeMap<Integer, ArrayList<Object>> getMatchData() {
         return matchData;
     }
+    
+    public ArrayList<Object> getScores() {
+        return scores;
+    }
 
-    public ArrayList<Object> getScores(int r) {
+    public ArrayList<Object> getExcelScore(int r) {
         Row row = sheet.getRow(r);
-        scores.clear();
+
         Iterator cells;
         Cell cell = row.getCell(0);
-        int count = 1;
+        
+        ArrayList scores = new ArrayList();
         
         cells = row.cellIterator();
         while (cells.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
@@ -124,9 +132,34 @@ public class MatchDataMap extends TreeMap {
                 scores.add(cell.getStringCellValue());
             } else if (cell.getCellTypeEnum() == CellType.NUMERIC) {
                 scores.add(cell.getNumericCellValue());
+            } else if (cell.getCellTypeEnum() == CellType.FORMULA) {
+                scores.add(cell.getNumericCellValue());
             }
         }
         return scores;
+    }
+    
+    public void setMatchData() {
+        Iterator rows = sheet.rowIterator();
+        rows.next();rows.next();rows.next();
+        
+        Row row = (Row)rows.next();
+        int index = 3;
+        while (rows.hasNext() && (row.getCell(index) != null) && (row.getCell(index).getCellTypeEnum() != CellType.BLANK)) {
+            row = (Row)rows.next();
+            matchData.put(index-3, getExcelScore(index));
+            index++;
+            rowCount++;
+        }
+        
+        Set set = matchData.entrySet();
+        Iterator i = set.iterator();
+        
+        while (i.hasNext()) {
+            Map.Entry me = (Map.Entry)i.next();
+            System.out.print(me.getKey() + ": ");
+            System.out.println(me.getValue());
+        }
     }
 
     public InputStream getInp() {
@@ -135,6 +168,10 @@ public class MatchDataMap extends TreeMap {
     
     public Workbook getWorkbook() {
         return wb;
+    }
+    
+    public int getRowCount() {
+        return rowCount;
     }
     
     public void setWorkbook(Workbook wb){
