@@ -167,7 +167,7 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel1.setText("Sort By:");
 
-        comboBox_Criteria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBox_Criteria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECT GAME PHASE" }));
         comboBox_Criteria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBox_CriteriaActionPerformed(evt);
@@ -269,19 +269,37 @@ public class GUI extends javax.swing.JFrame {
 
     private void comboBox_PhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_PhaseActionPerformed
         
+        String start[] = {"Total Score"};
+        String auto[] = {"Final Autonomous Score", "Glyph Score"};
+        String teleop[] = {"Final Teleop Score", "Glyph Score"};
+        String endgame[] = {"Final Endgame Score", "Relic Score"};
+                
         String phase = (String)comboBox_Phase.getSelectedItem();
         
         switch (phase) {
             case "Autonomous":
-                //comboBox_Criteria.setModel((ComboBoxModel<String>) new JComboBox());
-                //comboBox_Criteria.addItem(new ComboItem("test", "test"));
-                //comboBox_Criteria.addItem("test");
+                comboBox_Criteria.removeAllItems();
+                for (int i = 0; i < auto.length; i++) {
+                    comboBox_Criteria.addItem(auto[i]);
+                }
                 break;
             case "Teleop":
+                comboBox_Criteria.removeAllItems();
+                for (int i = 0; i < teleop.length; i++) {
+                    comboBox_Criteria.addItem(teleop[i]);
+                }
                 break;
             case "Endgame":
+                comboBox_Criteria.removeAllItems();
+                for (int i = 0; i < endgame.length; i++) {
+                    comboBox_Criteria.addItem(endgame[i]);
+                }
                 break;
             default:
+                comboBox_Criteria.removeAllItems();
+                for (int i = 0; i < start.length; i++) {
+                    comboBox_Criteria.addItem(start[i]);
+                }
                 break;
         }
     }//GEN-LAST:event_comboBox_PhaseActionPerformed
