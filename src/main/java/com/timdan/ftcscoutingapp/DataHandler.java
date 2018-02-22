@@ -37,7 +37,6 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  * @author Admin
  */
 public class DataHandler {
-    //TODO change back to value type ArrayList<String>
     public static MatchDataMap importData() throws FileNotFoundException, IOException, InvalidFormatException { //Method takes MatchDataMap, and inputs to tableMatchData
         
         /*
@@ -65,13 +64,13 @@ public class DataHandler {
 
         ArrayList<Object> scores = new ArrayList();
         
-        InputStream inp = new FileInputStream("Scouting_Template.xlsx"); //TODO: make the FileInputStream changable with import
+        InputStream inp = new FileInputStream("Scouting_Template.xlsx"); 
         MatchDataMap matchData = new MatchDataMap(inp);
 
         Sheet sheet = matchData.getWorkbook().getSheetAt(0);
 
         Iterator rows = sheet.rowIterator();
-        rows.next(); rows.next(); rows.next(); //Muy Optimal
+        rows.next(); rows.next(); rows.next();
         Row row = (Row)rows.next();
         
         Iterator cells = row.cellIterator();
@@ -81,6 +80,7 @@ public class DataHandler {
         //Sets the keys of matchData to the match number
         while (rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
             cells = row.cellIterator();
+            
             //Sets the values of matchData to an arrylist with data from the row
             while (cells.hasNext()) {
                 cell = (Cell) cells.next();
@@ -92,6 +92,7 @@ public class DataHandler {
             row = (Row)rows.next();
             matchData.put(count, scores);
             cell = row.getCell(0);
+            
             //System.out.println("Scores: " + scores.toString()); //prints each rows data to check that it's working
             scores.clear();
             count++;
@@ -100,8 +101,3 @@ public class DataHandler {
         return matchData;
     }
 }
-
-// Old inport method code in case we need it back
-//public static MatchDataMap importData() throws FileNotFoundException, IOException, InvalidFormatException{
-        /*
-*/

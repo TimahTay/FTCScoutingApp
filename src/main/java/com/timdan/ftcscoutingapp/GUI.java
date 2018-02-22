@@ -268,12 +268,14 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemImportActionPerformed
 
     private void comboBox_PhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_PhaseActionPerformed
+        
         String phase = (String)comboBox_Phase.getSelectedItem();
         
         switch (phase) {
             case "Autonomous":
-                comboBox_Criteria.setModel((ComboBoxModel<String>) new JComboBox());
-                comboBox_Criteria.addItem(new ComboItem("test", "test"));
+                //comboBox_Criteria.setModel((ComboBoxModel<String>) new JComboBox());
+                //comboBox_Criteria.addItem(new ComboItem("test", "test"));
+                //comboBox_Criteria.addItem("test");
                 break;
             case "Teleop":
                 break;

@@ -17,26 +17,21 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author tjtat
- */
 public class MatchDataMap extends TreeMap {
 
-    private final TreeMap<Integer, ArrayList<Object>> matchData;
-    private final ArrayList<Object> scores;
     private final InputStream inp;
-    private int rowCount = 0;
     private Workbook wb;
     private Sheet sheet;
     
+    private final TreeMap<Integer, ArrayList<Object>> matchData;
+    private final ArrayList<Object> scores;
+    
+    private int rowCount = 0;
+    
+    
     public MatchDataMap(InputStream i) throws IOException, InvalidFormatException {
+        
         /*
         Key for scores ArrayList:
         0  - team
@@ -61,52 +56,11 @@ public class MatchDataMap extends TreeMap {
         */
         
         inp = i;
-        matchData = new TreeMap();
-        scores = new ArrayList();
-        
         wb = WorkbookFactory.create(inp);
         sheet = wb.getSheetAt(0);
-      
-        /*
-        Iterator rows = sheet.rowIterator();
-        rows.next();rows.next();rows.next(); //Optimal
-        Row row = (Row) rows.next();
-
-        Iterator cells;
-        Cell cell = row.getCell(0);
-        int count = 1;
         
-        ArrayList scores = new ArrayList();
-        
-        
-        //Sets the keys of matchData to the match number
-        while (rows.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
-            cells = row.cellIterator();
-            //Sets the values of matchData to an arrylist with data from the row
-            while (cells.hasNext()) {
-                cell = (Cell) cells.next();
-                if (cell.getCellTypeEnum() == CellType.STRING) {
-                    scores.add(cell.getStringCellValue());
-                } else if (cell.getCellTypeEnum() == CellType.NUMERIC) {
-                    scores.add(cell.getNumericCellValue());
-                } else if (cell.getCellTypeEnum() == CellType.FORMULA) {
-                    scores.add(cell.getNumericCellValue());
-                }
-            }
-            
-            matchData.put(count, scores);
-            System.out.println(matchData);
-            scores.clear();
-            System.out.println(matchData);
-            
-            row = (Row) rows.next();
-            cell = row.getCell(0);
-
-            rowCount++;
-            count++;
-        }
-        
-        */
+        matchData = new TreeMap();
+        scores = new ArrayList();
     }
 
     public TreeMap<Integer, ArrayList<Object>> getMatchData() {
@@ -118,15 +72,17 @@ public class MatchDataMap extends TreeMap {
     }
 
     public ArrayList<Object> getExcelScore(int r) {
+        
         Row row = sheet.getRow(r);
-
-        Iterator cells;
+        Iterator cells = row.cellIterator();
+        
         Cell cell = row.getCell(0);
         
         ArrayList scores = new ArrayList();
         
-        cells = row.cellIterator();
-        while (cells.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK) {
+        //(cells.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK)
+        
+        for (int i = 0; i < 18; i++) {
             cell = (Cell) cells.next();
             if (cell.getCellTypeEnum() == CellType.STRING) {
                 scores.add(cell.getStringCellValue());
@@ -134,19 +90,20 @@ public class MatchDataMap extends TreeMap {
                 scores.add(cell.getNumericCellValue());
             } else if (cell.getCellTypeEnum() == CellType.FORMULA) {
                 scores.add(cell.getNumericCellValue());
+            } else if (cell.getCellTypeEnum() == CellType.BLANK) {
+                scores.add(null);
             }
         }
+        
         return scores;
     }
     
     public void setMatchData() {
-        Iterator rows = sheet.rowIterator();
-        rows.next();rows.next();rows.next();
         
-        Row row = (Row)rows.next();
+        Row row = sheet.getRow(3);
+        
         int index = 3;
-        while (rows.hasNext() && (row.getCell(index) != null) && (row.getCell(index).getCellTypeEnum() != CellType.BLANK)) {
-            row = (Row)rows.next();
+        while (sheet.getRow(index).getCell(0).getCellTypeEnum() != CellType.BLANK) {
             matchData.put(index-3, getExcelScore(index));
             index++;
             rowCount++;
