@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 /*
@@ -29,6 +31,11 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 public class GUI extends javax.swing.JFrame {
     InputStream inp;
     MatchDataMap matchData;
+    
+    String startCB[] = {"Total Score"};
+    String autoCB[] = {"Final Autonomous Score", "Glyph Score"};
+    String teleopCB[] = {"Final Teleop Score", "Glyph Score"};
+    String endgameCB[] = {"Final Endgame Score", "Relic Score"};
     /**
      * Creates new form GUI
      */
@@ -63,6 +70,7 @@ public class GUI extends javax.swing.JFrame {
         comboBox_Criteria = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        button_Sort = new javax.swing.JButton();
         MenuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemImport = new javax.swing.JMenuItem();
@@ -178,6 +186,13 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel3.setText("Criteria");
 
+        button_Sort.setText("Sort Teams");
+        button_Sort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_SortActionPerformed(evt);
+            }
+        });
+
         MenuBar.setName("Scouting Calculator GUI"); // NOI18N
 
         menuFile.setText("File");
@@ -227,6 +242,10 @@ public class GUI extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(comboBox_Criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(191, 191, 191)
+                        .addComponent(button_Sort)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -248,7 +267,9 @@ public class GUI extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(comboBox_Criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboBox_Phase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)))
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addComponent(button_Sort))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
@@ -268,45 +289,70 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemImportActionPerformed
 
     private void comboBox_PhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_PhaseActionPerformed
-        
-        String start[] = {"Total Score"};
-        String auto[] = {"Final Autonomous Score", "Glyph Score"};
-        String teleop[] = {"Final Teleop Score", "Glyph Score"};
-        String endgame[] = {"Final Endgame Score", "Relic Score"};
                 
         String phase = (String)comboBox_Phase.getSelectedItem();
         
         switch (phase) {
             case "Autonomous":
                 comboBox_Criteria.removeAllItems();
-                for (int i = 0; i < auto.length; i++) {
-                    comboBox_Criteria.addItem(auto[i]);
+                for (int i = 0; i < autoCB.length; i++) {
+                    comboBox_Criteria.addItem(autoCB[i]);
                 }
                 break;
             case "Teleop":
                 comboBox_Criteria.removeAllItems();
-                for (int i = 0; i < teleop.length; i++) {
-                    comboBox_Criteria.addItem(teleop[i]);
+                for (int i = 0; i < teleopCB.length; i++) {
+                    comboBox_Criteria.addItem(teleopCB[i]);
                 }
                 break;
             case "Endgame":
                 comboBox_Criteria.removeAllItems();
-                for (int i = 0; i < endgame.length; i++) {
-                    comboBox_Criteria.addItem(endgame[i]);
+                for (int i = 0; i < endgameCB.length; i++) {
+                    comboBox_Criteria.addItem(endgameCB[i]);
                 }
                 break;
             default:
                 comboBox_Criteria.removeAllItems();
-                for (int i = 0; i < start.length; i++) {
-                    comboBox_Criteria.addItem(start[i]);
+                for (int i = 0; i < startCB.length; i++) {
+                    comboBox_Criteria.addItem(startCB[i]);
                 }
                 break;
         }
     }//GEN-LAST:event_comboBox_PhaseActionPerformed
 
     private void comboBox_CriteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_CriteriaActionPerformed
-        //TODO: stuff
+   
     }//GEN-LAST:event_comboBox_CriteriaActionPerformed
+
+    private void button_SortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_SortActionPerformed
+        
+        String phase = (String)comboBox_Phase.getSelectedItem();
+        String criteria = (String)comboBox_Criteria.getSelectedItem();
+        
+        switch (phase) {
+            case "Autonomous":
+                if (criteria.equals(autoCB[0])) {
+                    DefaultTableModel model = (DefaultTableModel) tableTeamRankings.getModel();
+                    model.setRowCount(0);
+                    for (int i = 0; i < matchData.getRowCount(); i++) {
+                        model.addRow(rank(14)[i]);
+                    }
+                } else if (criteria.equals(autoCB[1])) {
+                    
+                }
+                
+                break;
+            case "Teleop":
+                
+                break;
+            case "Endgame":
+                
+                break;
+            default:
+                
+                break;
+        }
+    }//GEN-LAST:event_button_SortActionPerformed
 
     
     
@@ -365,13 +411,66 @@ public class GUI extends javax.swing.JFrame {
         }
     }
     
-    public void rank() {
+    public Object[][] rank(int index) {
         
+        /*
+        ArrayList<Object> team = new ArrayList();
+        ArrayList<Double> value = new ArrayList();
+        
+        for (int i = 0; i < matchData.getRowCount(); i++) {
+            value.add((Double)matchData.getMatchData().get(i).get(index));
+        }
+        
+        for (int i = 0; i < matchData.getRowCount(); i++) {
+            if (!team.contains(matchData.getMatchData().get(i).get(0))) {
+                team.set(i, matchData.getMatchData().get(i).get(0));
+            } else {
+                double hold = value.get(team.indexOf(matchData.getMatchData().get(i).get(0)));
+                //value.set(team.indexOf(matchData.getMatchData().get(i).get(0)), hold+);
+                team.set(i, null);
+            }
+        }
+        
+        
+        
+        Map<Object,Integer> multiMap = new HashMap();
+        
+        for (int i = 0; i < matchData.getRowCount(); i++) {
+            if (!multiMap.containsKey(matchData.getMatchData().get(i).get(0))) {
+                //multiMap.put(matchData.getMatchData().get(i).get(0)), );
+            }
+        }
+        */
+        
+        // Sorts by criteria
+        Object[][] ranking = new Object[matchData.getRowCount()][2];
+        for (int i = 0; i < matchData.getRowCount(); i++) {
+            ranking[i][0] = matchData.getMatchData().get(i).get(0);
+            ranking[i][1] = matchData.getMatchData().get(i).get(index);
+        }
+
+        
+        for (int i = (ranking.length - 1); i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                double a = (double)(ranking[j-1][1]);
+                double b = (double)(ranking[j][1]);
+                if (a < b) {
+                    double temp = a;
+                    ranking[j-1][1] = b;
+                    ranking[j][1] = temp;
+                }
+            }
+        }
+        
+        System.out.println(Arrays.deepToString(ranking));
+        
+        return ranking;
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JButton button_Sort;
     private javax.swing.JComboBox<String> comboBox_Criteria;
     private javax.swing.JComboBox<String> comboBox_Phase;
     private javax.swing.JLabel jLabel1;
