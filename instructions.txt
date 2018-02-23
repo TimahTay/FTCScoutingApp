@@ -1,0 +1,9 @@
+INSTRUCTIONS
+
+1. Click the Open Template button to open the scouting template on your browser.
+
+2. Edit the data in the template and export it as an .xlsx file.
+
+3. File -> Import -> Select your .xlsx file
+
+4. Once the data is imported into the program, use the buttons on the right to sort teams based on criteria.
