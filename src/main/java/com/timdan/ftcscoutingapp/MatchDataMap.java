@@ -79,9 +79,7 @@ public class MatchDataMap extends TreeMap {
         Cell cell = row.getCell(0);
         
         ArrayList scores = new ArrayList();
-        
-        //(cells.hasNext() && cell != null && cell.getCellTypeEnum() != CellType.BLANK)
-        
+
         for (int i = 0; i < 18; i++) {
             cell = (Cell) cells.next();
             if (cell.getCellTypeEnum() == CellType.STRING) {

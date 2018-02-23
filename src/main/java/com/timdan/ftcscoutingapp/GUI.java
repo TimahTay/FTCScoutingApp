@@ -8,15 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -25,12 +18,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *
@@ -50,8 +37,6 @@ public class GUI extends javax.swing.JFrame {
     public GUI() throws FileNotFoundException, IOException, InvalidFormatException {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        
-        // Import data and set to table
     }
 
     /**
@@ -235,14 +220,14 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 682, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(77, 77, 77)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lableTeamRankings)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lableTeamRankings)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,12 +236,9 @@ public class GUI extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
-                                    .addComponent(comboBox_Criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(26, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(button_Sort)
-                        .addGap(164, 164, 164))))
+                                    .addComponent(comboBox_Criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(button_Sort, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,7 +248,7 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(lableMatchData)
                     .addComponent(lableTeamRankings))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
@@ -278,7 +260,7 @@ public class GUI extends javax.swing.JFrame {
                             .addComponent(comboBox_Criteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboBox_Phase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(button_Sort))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(18, Short.MAX_VALUE))
@@ -388,17 +370,23 @@ public class GUI extends javax.swing.JFrame {
                 }
                 break;
             default:
-                
+                if (criteria.equals(startCB[0])) {
+                    DefaultTableModel model = (DefaultTableModel) tableTeamRankings.getModel();
+                    model.setRowCount(0);
+                    for (int i = 0; i < matchData.getRowCount(); i++) {
+                        model.addRow(rank(17)[i]);
+                    }
+                }
                 break;
         }
     }//GEN-LAST:event_button_SortActionPerformed
 
     private void menuItemExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExportActionPerformed
-        //Creates new excel sheet for output
+        // Creates new excel sheet for output
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Team Rankings");
        
-        //Loops through Jtable and copies to a 2D array "teamRankings"
+        // Loops through Jtable and copies to a 2D array "teamRankings"
         Object[][] teamRankings = new Object[tableTeamRankings.getRowCount()][tableTeamRankings.getColumnCount()];
         int arraySpotX = 0;
         int arraySpotY = 0;
@@ -410,9 +398,9 @@ public class GUI extends javax.swing.JFrame {
             arraySpotY++;
             arraySpotX = 0;
         }
-        System.out.println(Arrays.deepToString(teamRankings)); //prints to make sure
-       
-        //Populates excel file with data from 2D array
+        System.out.println(Arrays.deepToString(teamRankings));
+        
+        // Populates excel file with data from 2D array
         int rowCount = 0;
        
         for (Object[] i : teamRankings){
@@ -527,8 +515,7 @@ public class GUI extends javax.swing.JFrame {
                 team.set(i, null);
             }
         }
-        
-        
+    
         
         Map<Object,Integer> multiMap = new HashMap();
         
@@ -560,10 +547,8 @@ public class GUI extends javax.swing.JFrame {
             else if (index == 15) ranking[i][1] = (double)matchData.getMatchData().get(i).get(index)
                                                 + (double)matchData.getMatchData().get(i).get(index+1); 
             else ranking[i][1] = matchData.getMatchData().get(i).get(index); 
-            //ranking[i][1] = matchData.getMatchData().get(i).get(index); 
         }
 
-        
         for (int i = (ranking.length - 1); i >= 0; i--) {
             for (int j = 1; j <= i; j++) {
                 double a = (double)(ranking[j-1][1]);
@@ -580,9 +565,6 @@ public class GUI extends javax.swing.JFrame {
         
         return ranking;
     }
-    
-    
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
