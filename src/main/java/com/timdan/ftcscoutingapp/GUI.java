@@ -553,10 +553,16 @@ public class GUI extends javax.swing.JFrame {
             for (int j = 1; j <= i; j++) {
                 double a = (double)(ranking[j-1][1]);
                 double b = (double)(ranking[j][1]);
+                String a1 = ""+ranking[j-1][0];
+                String b1 = ""+ranking[j][0];
                 if (a < b) {
                     double temp = a;
                     ranking[j-1][1] = b;
                     ranking[j][1] = temp;
+                    
+                    String buffer = a1;
+                    ranking[j-1][0] = b1;
+                    ranking[j][0] = buffer;
                 }
             }
         }
