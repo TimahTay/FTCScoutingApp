@@ -1,5 +1,6 @@
 package com.timdan.ftcscoutingapp;
 import com.timdan.ftcscoutingapp.MatchDataMap;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
@@ -44,10 +47,6 @@ public class GUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         
         // Import data and set to table
-        inp = new FileInputStream("Scouting_Template.xlsx");
-        matchData = new MatchDataMap(inp);
-        matchData.setMatchData();
-        setTable();
     }
 
     /**
@@ -278,13 +277,25 @@ public class GUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuItemImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemImportActionPerformed
-        try {
-            // TODO add your handling code here:
-            matchData = DataHandler.importData();
-        } catch (IOException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidFormatException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+
+            JOptionPane.showMessageDialog(this, "Make sure your match data file is in .xlsx format!");
+            JFileChooser jfc = new JFileChooser();
+            if (jfc.showOpenDialog(menuFile) == JFileChooser.APPROVE_OPTION) {
+                File file = jfc.getSelectedFile();
+                try {
+                    inp = new FileInputStream(file.getAbsolutePath());
+                } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(this, "ERROR: Import Failed, can not find file");
+                }
+                try {
+                    matchData = new MatchDataMap(inp);
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidFormatException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                matchData.setMatchData();
+                setTable();
         }
     }//GEN-LAST:event_menuItemImportActionPerformed
 
@@ -466,6 +477,8 @@ public class GUI extends javax.swing.JFrame {
         
         return ranking;
     }
+    
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
